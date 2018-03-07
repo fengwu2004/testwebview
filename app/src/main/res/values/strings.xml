@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">testwebview</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="entermap">进入地图</string>
+</resources>

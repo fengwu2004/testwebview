@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,8 +39,6 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
   private ViewGroup rootView;
 
   private X5WebView mapview;
-
-  private Button backbutton;
 
   private Context context;
 
@@ -71,11 +70,11 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     try{
 
-       _gpslocationmananger.initLocation(context);
+      _gpslocationmananger.initLocation(context);
     }
     catch (Exception e){
 
-       UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","03_"+"GPSFromNative接收异常");
+      UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","03_"+"GPSFromNative接收异常");
     }
 
     UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","_regionManager.start();开始前");
@@ -90,14 +89,14 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     _enteredRegions.add(regionId);
 
-    enterRegion(name);
+    enterRegion(regionId);
 
     UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId));
   }
 
-  private void enterRegion(String name) {
+  private void enterRegion(int regionId) {
 
-    mapview.loadUrl("javascript:enterRegion('" + name + "')");
+    mapview.loadUrl("javascript:enterRegion('" + String.valueOf(regionId) + "')");
   }
 
   @Override
@@ -112,6 +111,8 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
     mapview = new X5WebView(context);
 
     mapview.getSettings().setJavaScriptEnabled(true);
+
+    mapview.getSettings().setAllowFileAccessFromFileURLs(true);
 
     mapview.setWebViewClient(new com.tencent.smtt.sdk.WebViewClient() {
 
@@ -130,31 +131,21 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     rootView.addView(mapview);
 
-    backbutton = new Button(context);
-
-    backbutton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-    backbutton.setBackgroundResource(R.mipmap.fanhui);
-
-    rootView.addView(backbutton);
-
-    ViewGroup.MarginLayoutParams paramsbtn = (ViewGroup.MarginLayoutParams)backbutton.getLayoutParams();
-
-    paramsbtn.leftMargin = 100;
-
-    paramsbtn.topMargin = 100;
-
     mapview.setVisibility(View.INVISIBLE);
 
-    backbutton.setVisibility(View.INVISIBLE);
+    mapview.addJavascriptInterface(this, "android");
+  }
 
-    backbutton.setOnClickListener(new View.OnClickListener() {
+  @JavascriptInterface
+  public void backbuttonclick() {
+
+    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
       @Override
-      public void onClick(View v) {
+      public void run() {
 
         mapview.setVisibility(View.INVISIBLE);
 
-        backbutton.setVisibility(View.INVISIBLE);
+        rootView.requestLayout();
       }
     });
   }
@@ -175,8 +166,6 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
       if (mapview != null) {
 
         mapview.setVisibility(View.INVISIBLE);
-
-        backbutton.setVisibility(View.INVISIBLE);
       }
 
       return;
@@ -185,8 +174,6 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
     if (mapview != null) {
 
       mapview.setVisibility(View.VISIBLE);
-
-      backbutton.setVisibility(View.VISIBLE);
 
       rootView.requestLayout();
 

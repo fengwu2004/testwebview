@@ -3,10 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\ky\Desktop\testwebview\app\app.iml" filepath="C:\Users\ky\Desktop\testwebview\app\app.iml" />
       <module fileurl="file://C:\Users\ky\AndroidStudioProjects\testwebview\dfct.iml" filepath="C:\Users\ky\AndroidStudioProjects\testwebview\dfct.iml" />
       <module fileurl="file://$PROJECT_DIR$/testwebview.iml" filepath="$PROJECT_DIR$/testwebview.iml" />
-      <module fileurl="file://C:\Users\ky\Desktop\testwebview\testwebview.iml" filepath="C:\Users\ky\Desktop\testwebview\testwebview.iml" />
     </modules>
   </component>
 </project>

@@ -89,14 +89,14 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     _enteredRegions.add(regionId);
 
-    enterRegion(regionId);
+    enterRegion(name);
 
     UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId));
   }
 
-  private void enterRegion(int regionId) {
+  private void enterRegion(String name) {
 
-    mapview.loadUrl("javascript:enterRegion('" + String.valueOf(regionId) + "')");
+    mapview.loadUrl("javascript:enterRegion('" + name + "')");
   }
 
   @Override
@@ -127,7 +127,9 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     mapview.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    mapview.loadUrl("file:///android_asset/webapp/index.html");
+//    mapview.loadUrl("file:///android_asset/webapp/index.html");
+
+    mapview.loadUrl("https://wx.indoorun.com/indoorun/test/dfct/webapp/index.html");
 
     rootView.addView(mapview);
 

@@ -91,7 +91,7 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     enterRegion(name);
 
-    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId));
+    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId) + name);
   }
 
   private void enterRegion(String name) {

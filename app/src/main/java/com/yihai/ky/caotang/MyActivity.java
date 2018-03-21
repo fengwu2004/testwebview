@@ -127,8 +127,6 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     mapview.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-//    mapview.loadUrl("file:///android_asset/webapp/index.html");
-
     mapview.loadUrl("https://wx.indoorun.com/indoorun/test/dfct/webapp/index.html");
 
     rootView.addView(mapview);
@@ -136,20 +134,6 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
     mapview.setVisibility(View.INVISIBLE);
 
     mapview.addJavascriptInterface(this, "android");
-  }
-
-  @JavascriptInterface
-  public void backbuttonclick() {
-
-    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-
-        mapview.setVisibility(View.INVISIBLE);
-
-        rootView.requestLayout();
-      }
-    });
   }
 
   public void initMap(Context context) {

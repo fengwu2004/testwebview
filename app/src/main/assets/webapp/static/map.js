@@ -31,8 +31,5 @@ function setNaviTrace() {
 
 function enterRegion(name) {
   
-  if (window.dfctmap != undefined) {
-  
-    window.enterRegion(name)
-  }
+  window.spotmgr.reachSpotBy(name)
 }

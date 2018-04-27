@@ -212,6 +212,32 @@ public class MuseumLocator {
 		mark.put("30000:10018",31);
 		//千诗碑内的二维码，触发31的事件，认为和30是同一区域，不用互相切换
 		mark.put("30000:10012",32);
+
+    //正门
+    mark.put("30000:10051", 33);
+    mark.put("30000:10087", 33);
+    //正门外
+    mark.put("30000:10085", 116);
+    mark.put("16160:18982", 116);
+    //南门
+    mark.put("30000:10060", 34);
+    mark.put("30000:10072", 34);
+    //南门外
+    mark.put("16160:19263", 117);
+    mark.put("30000:10073", 117);
+    //北门（触发）
+    mark.put("30000:10028", 35);
+	mark.put("30000:10097", 35);
+	
+	//围栏报警新增3个标签
+mark.put("16160:17635", 1);
+mark.put("16160:19143", 1);
+mark.put("3000:1003", 1);
+//唐代遗址外新增一个标签
+mark.put("16160:23884", 101);
+//新增区域，东门（触发）编号36
+mark.put("30:10", 36);
+mark.put("35:10554", 36);
 	}
 
 	public synchronized int getPosition(List<Beacon> beacons) {
@@ -317,7 +343,8 @@ public class MuseumLocator {
 			}
 			else if(maxArea>100) {
 				//统一认为是室外
-				if(currentArea!=1&&currentArea!=31&&currentArea<100)centerPos = 0;
+        if (currentArea != 1 && currentArea != 13 && currentArea != 31 && currentArea != 35 && currentArea != 36 && currentArea < 100)
+          centerPos = 0;
 			}
 			else{
 

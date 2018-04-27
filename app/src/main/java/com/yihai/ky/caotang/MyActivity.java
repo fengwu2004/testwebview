@@ -3,6 +3,7 @@ package com.yihai.ky.caotang;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -11,11 +12,13 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.huawei.android.app.admin.HwDevicePolicyManager;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.unity3d.player.UnityPlayer;
 import com.unity3d.player.UnityPlayerActivity;
 import com.yihai.ky.caotang.R;
@@ -91,12 +94,24 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     enterRegion(name);
 
-    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId) + name);
+    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","00_"+ String.valueOf(regionId));
+
+    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","进入区域的名称："+ name);
   }
 
   private void enterRegion(String name) {
 
-    mapview.loadUrl("javascript:enterRegion('" + name + "')");
+    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
+       @Override
+       public void run() {
+         mapview.evaluateJavascript("javascript:enterRegion('" + name + "')", new ValueCallback<String>() {
+           @Override
+           public void onReceiveValue(String s) {
+
+           }
+         });
+       }
+     });
   }
 
   @Override
@@ -127,13 +142,31 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     mapview.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    mapview.loadUrl("https://wx.indoorun.com/indoorun/test/dfct/webapp/index.html");
+    mapview.loadUrl("file:///android_asset/webapp/index.html");
 
     rootView.addView(mapview);
 
     mapview.setVisibility(View.INVISIBLE);
 
     mapview.addJavascriptInterface(this, "android");
+    ((UnityPlayerActivity)context).getCurrentFocus().requestLayout();
+  }
+
+  @JavascriptInterface
+  public void backbuttonclick() {
+
+    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+
+        UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","04_"+"01" );
+
+        mapview.setVisibility(View.INVISIBLE);
+
+        rootView.requestLayout();
+
+      }
+    });
   }
 
   public void initMap(Context context) {
@@ -169,10 +202,10 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
     initMap(context);
   }
 
-  public void setMapNaviTrace() {
-
-    mapview.loadUrl("javascript:setNaviTrace()");
-  }
+//  public void setMapNaviTrace() {
+//
+//    mapview.loadUrl("javascript:setNaviTrace()");
+//  }
 
   @Override
   public void onReceiveLocation(Location location, float azimuth) {
@@ -192,7 +225,18 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 
     String str = jsonObject.toString();
 
-    mapview.loadUrl("javascript:setGpsPos('" + str + "')");
+    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+
+        mapview.evaluateJavascript("javascript:setGpsPos('" + str + "')", new ValueCallback<String>() {
+          @Override
+          public void onReceiveValue(String s) {
+
+          }
+        });
+      }
+    });
 
 //    //传递坐标信息给unity
 //    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","02_Longitude"+String.valueOf(location.getLongitude()));
@@ -201,6 +245,35 @@ public class MyActivity implements RegionManagerListener, GPSLocationManagerList
 //    //传递gps给unity，让unity来传递给uniweb
 //    UnityPlayer.UnitySendMessage("NativeCtrl","Receiver","02_setGpsPos"+str);
   }
+
+  //********************************关闭软键盘***********************************************//
+/*
+  public  void hideSoftInput(Context context) {
+    View view = ((UnityPlayerActivity)context).getWindow().peekDecorView();
+    if (view != null) {
+      InputMethodManager inputmanger = (InputMethodManager) context
+              .getSystemService(Context.INPUT_METHOD_SERVICE);
+      inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+  }
+
+  private void hintKeyboard(Context context) {
+    InputMethodManager imm = (InputMethodManager)((UnityPlayerActivity)context).getSystemService(context.INPUT_METHOD_SERVICE);
+    if(imm.isActive()&&((UnityPlayerActivity)context).getCurrentFocus()!=null){
+      if (((UnityPlayerActivity)context).getCurrentFocus().getWindowToken()!=null) {
+        imm.hideSoftInputFromWindow(((UnityPlayerActivity)context).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+      }
+    }
+  }
+*/
+
+  //********************************重启整个APP**********************************************//
+
+  //*********************************************************************//
+
+
+
+  //**************************log日志系统调用*******************************************//
 
   //**************************测试******打开蓝牙*******************************************//
   //当前 Android 设备的 bluetooth 是否已经开启

@@ -56,7 +56,8 @@ public class RegionManager {
 
     _regionNames.put(0,"室外");
     _regionNames.put(1,"围栏报警");
-    _regionNames.put(2,"北门");
+    _regionNames.put(35,"北门");
+    _regionNames.put(36,"东门");
     _regionNames.put(3,"唐代遗址");
     _regionNames.put(4,"唐亭台遗址");
     _regionNames.put(4,"唐亭台遗址");
@@ -76,19 +77,18 @@ public class RegionManager {
     _regionNames.put(18,"草堂留后世");
     _regionNames.put(19,"大廨");
     _regionNames.put(20,"诗圣著千秋");
-    _regionNames.put(21,"正门");
+    _regionNames.put(33,"正门");
     _regionNames.put(22,"花径");
     _regionNames.put(23,"浣花祠");
     _regionNames.put(24,"盆景园");
     _regionNames.put(25,"隐壁");
     _regionNames.put(26,"大雅堂");
     _regionNames.put(27,"情系草堂陈列室");
-    _regionNames.put(28,"南门");
+    _regionNames.put(34,"南门");
     _regionNames.put(29,"万佛楼");
     _regionNames.put(30,"杜甫千试碑");
     _regionNames.put(31,"杜甫千诗碑触发二维码");
   }
-
   public void setRegionListener(RegionManagerListener listener) {
 
     _listener = listener;
